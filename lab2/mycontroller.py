@@ -143,11 +143,12 @@ def readTableRules(p4info_helper, sw):
             print('-----')
 
 
-def printCounter(p4info_helper, sw, counter_name, index):
+def printCounter(p4info_helper, sw, counter_name, index , filename):
     """
     Reads the specified counter at the specified index from the switch. In our
     program, the index is the tunnel ID. If the index is 0, it will return all
     values from the counter.
+
     :param p4info_helper: the P4Info helper
     :param sw:  the switch connection
     :param counter_name: the name of the counter from the P4 program
@@ -156,6 +157,15 @@ def printCounter(p4info_helper, sw, counter_name, index):
     for response in sw.ReadCounters(p4info_helper.get_counters_id(counter_name), index):
         for entity in response.entities:
             counter = entity.counter_entry
+            data = sw.name
+            if counter_name == "MyIngress.ingressTunnelCounter":
+                data += " send " + str(counter.data.packet_count) + "packets,the counter number is "
+            else :
+                data+=" get " + str(counter.data.packet_count) + "packets,the counter number is "
+            data+= str(index)
+            data+='\n'
+            with open(filename, 'a') as file:
+                file.write(data)
             print("%s %s %d: %d packets (%d bytes)" % (
                 sw.name, counter_name, index,
                 counter.data.packet_count, counter.data.byte_count
@@ -233,18 +243,42 @@ def main(p4info_file_path, bmv2_file_path):
         while True:
             sleep(2)
             print('\n----- Reading tunnel counters -----')
-            printCounter(p4info_helper, s1, "MyIngress.ingressTunnelCounter", 100)
-            printCounter(p4info_helper, s2, "MyIngress.egressTunnelCounter", 100)
-            printCounter(p4info_helper, s2, "MyIngress.ingressTunnelCounter", 200)
-            printCounter(p4info_helper, s1, "MyIngress.egressTunnelCounter", 200)
-            printCounter(p4info_helper, s2, "MyIngress.ingressTunnelCounter", 300)
-            printCounter(p4info_helper, s3, "MyIngress.egressTunnelCounter", 300)
-            printCounter(p4info_helper, s3, "MyIngress.ingressTunnelCounter", 400)
-            printCounter(p4info_helper, s2, "MyIngress.egressTunnelCounter", 400)
-            printCounter(p4info_helper, s1, "MyIngress.ingressTunnelCounter", 500)
-            printCounter(p4info_helper, s3, "MyIngress.egressTunnelCounter", 500)
-            printCounter(p4info_helper, s3, "MyIngress.ingressTunnelCounter", 600)
-            printCounter(p4info_helper, s1, "MyIngress.egressTunnelCounter", 600)
+            print('\n----- s1 -> s2 -----')
+            data = "s1->s2 \n"
+            with open('S1S2.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s1, "MyIngress.ingressTunnelCounter", 100, 'S1S2.txt')
+            printCounter(p4info_helper, s2, "MyIngress.egressTunnelCounter", 100, 'S1S2.txt')
+            print('\n----- s2 -> s1 -----')
+            data = "s2->s1 \n"
+            with open('S1S2.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s2, "MyIngress.ingressTunnelCounter", 200, 'S1S2.txt')
+            printCounter(p4info_helper, s1, "MyIngress.egressTunnelCounter", 200, 'S1S2.txt')
+            print('\n----- s2 -> s3 -----')
+            data = "s2->s3 \n"
+            with open('S2S3.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s2, "MyIngress.ingressTunnelCounter", 300, 'S2S3.txt')
+            printCounter(p4info_helper, s3, "MyIngress.egressTunnelCounter", 300, 'S2S3.txt')
+            print('\n----- s3 -> s2 -----')
+            data = "s3->s2 \n"
+            with open('S2S3.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s3, "MyIngress.ingressTunnelCounter", 400, 'S2S3.txt')
+            printCounter(p4info_helper, s2, "MyIngress.egressTunnelCounter", 400, 'S2S3.txt')
+            print('\n----- s1 -> s3 -----')
+            data = "s1->s3 \n"
+            with open('S1S3.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s1, "MyIngress.ingressTunnelCounter", 500, 'S1S3.txt')
+            printCounter(p4info_helper, s3, "MyIngress.egressTunnelCounter", 500, 'S1S3.txt')
+            print('\n----- s3 -> s1 -----')
+            data = "s3->s1 \n"
+            with open('S1S3.txt', 'a') as file:
+                file.write(data)
+            printCounter(p4info_helper, s3, "MyIngress.ingressTunnelCounter", 600, 'S1S3.txt')
+            printCounter(p4info_helper, s1, "MyIngress.egressTunnelCounter", 600, 'S1S3.txt')
 
     except KeyboardInterrupt:
         print(" Shutting down.")
