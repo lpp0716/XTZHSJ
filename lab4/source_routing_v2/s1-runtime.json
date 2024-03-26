@@ -1,0 +1,40 @@
+{
+    "target": "bmv2",
+    "p4info": "build/source_routing.p4.p4info.txt",
+    "bmv2_json": "build/source_routing.json",
+    "table_entries": [
+      {
+        "table": "MyIngress.ipv4_lpm_add",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+        },
+        "action_name": "MyIngress.addlabel",
+        "action_params": {
+          "port": 1,
+          "flag": 1
+        }
+      },
+      {
+        "table": "MyIngress.ipv4_lpm_add2",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.2.2", 32]
+        },
+        "action_name": "MyIngress.addlabel2",
+        "action_params": {
+          "port": 2,
+          "flag": 0
+        }
+      },
+      {
+        "table": "MyEgress.ipv4_final",
+        "match": {
+          "hdr.ipv4.dstAddr": ["10.0.1.1", 32]
+        },
+        "action_name": "MyEgress.dmac",
+        "action_params": {
+          "dstAddr": "08:00:00:00:01:11"
+        }
+      }
+     ]
+  }
+  
