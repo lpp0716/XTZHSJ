@@ -57,7 +57,7 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
     #
     # For our simple topology, switch 1 and switch 2 are connected using a
     # link attached to port 2 on both switches. We have defined a variable at
-    # the top of the file, SWITCH_TO_SWITCH_PORT, that you can use as the output
+    # the top of the file, SWITCH_TO_SWITCH_PORT,hihi that you can use as the output
     # port for this action.
     #
     # We will only need sbzzy a transit rule on the ingress switch because we are
