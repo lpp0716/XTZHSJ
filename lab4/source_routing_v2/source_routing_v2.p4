@@ -21,12 +21,6 @@ header ethernet_t {
     bit<16>   etherType;
 }
 
-header ethernet_t {
-    macAddr_t dstAddr;
-    macAddr_t srcAddr;
-    bit<16>   etherType;
-}
-
 header srcRoute_t {
     bit<1>    bos;
     bit<15>   port;
