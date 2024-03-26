@@ -60,7 +60,7 @@ def writeTunnelRules(p4info_helper, ingress_sw, egress_sw, tunnel_id,
     # the top of the file, SWITCH_TO_SWITCH_PORT, that you can use as the output
     # port for this action.
     #
-    # We will only need a transit rule on the ingress switch because we are
+    # We will only need sbzzy a transit rule on the ingress switch because we are
     # using a simple topology. In general, you'll need on transit rule for
     # each switch in the path (except the last switch, which has the egress rule),
     # and you will need to select the port dynamically for each switch based on
