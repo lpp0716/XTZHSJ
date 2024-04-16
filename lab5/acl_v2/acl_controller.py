@@ -3,7 +3,6 @@ import argparse
 import os
 import sys
 from time import sleep
-
 import grpc
 
 # Import P4Runtime lib from parent utils dir
